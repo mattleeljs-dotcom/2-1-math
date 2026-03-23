@@ -1,0 +1,151 @@
+%% Section 1
+%% 문제 1 - 배열 연산
+
+% 행렬 A 정의
+A = [1 4 2 2; 4 100 7 9; 7 3 pi 42];
+B = log(A);           % B = ln(A)
+
+% (a) B의 두 번째 행 선택
+disp('(a) B의 두 번째 행:')
+B(2, :)
+
+% (b) B의 두 번째 행의 합
+disp('(b) B의 두 번째 행의 합:')
+sum(B(2, :))
+
+% (c) B의 두 번째 열과 A의 첫 번째 열의 원소별 곱
+disp('(c) B의 2열 .* A의 1열:')
+result_c = B(:,2) .* A(:,1)
+
+% (d) (c) 결과 벡터의 최대값
+disp('(d) 최대값:')
+max(result_c)
+
+% (e) A의 1행 ./ B의 3열 처음 세 원소, 결과 합
+disp('(e) 원소별 나눗셈 결과 합:')
+result_e = A(1, 1:3) ./ B(1:3, 3)'; 
+ans_e = sum(result_e)
+
+
+%% Section 2
+%% 문제 2 - 발사체 운동
+
+% 초기값 설정
+v0 = 50;                      % 초기 속도 (m/s)
+A_deg = 50;                   % 발사각 (도)
+A_rad = A_deg * pi / 180;     % 라디안 변환
+g = 9.81;                     % 중력가속도 (m/s²)
+
+% (a) 충돌 시간 thit 및 최고 높이 ymax
+thit = 2 * v0 * sin(A_rad) / g;
+t_top = v0 * sin(A_rad) / g;
+ymax  = v0 * sin(A_rad) * t_top - 0.5 * g * t_top^2;
+
+fprintf('충돌 시간 thit = %.4f 초\n', thit);
+fprintf('최고 높이 ymax = %.4f m\n',  ymax);
+
+% (b) 궤적 그래프 (x vs y)
+t = linspace(0, thit, 500);
+x = (v0 * cos(A_rad)) .* t;
+y = (v0 * sin(A_rad)) .* t - 0.5 * g .* t.^2;
+
+figure;
+plot(x, y, 'b-', 'LineWidth', 2);
+xlabel('x (m)');
+ylabel('y (m)');
+title('발사체 궤적 (v_0=50 m/s, θ=50°)');
+grid on;
+
+
+%% Section 3
+%% 문제 3 - 함수 그래프
+
+x = linspace(-2, 16, 1000);
+f = (4 * cos(x)) ./ (x + exp(-0.75 * x));
+
+figure;
+plot(x, f, 'r-', 'LineWidth', 1.5);
+xlabel('x');
+ylabel('f(x)');
+title('f(x) = 4cos(x) / (x + e^{-0.75x}),  -2 \leq x \leq 16');
+grid on;
+
+
+
+%% Section 4
+%% 문제 4 - 재료 소비 행렬
+
+% (a) 5×3 소비 행렬 (행: 재료 1~5, 열: 5월·6월·7월)
+C = [5 4 6;
+     3 2 4;
+     6 5 3;
+     3 5 4;
+     2 4 3];
+
+% (b) 각 달의 총 소비량 (열 합계)
+disp('(b) 월별 총 소비량 [5월 6월 7월]:')
+monthly_total = sum(C, 1)
+
+% (c) 각 재료별 3개월 총 소비량 (행 합계)
+disp('(c) 재료별 총 소비량:')
+material_total = sum(C, 2)
+
+% (d) 전체 총 소비량
+disp('(d) 전체 총 소비량:')
+grand_total = sum(C(:))
+
+
+
+%% Section 5
+%% 문제 5 - 다항식 연산
+
+% (a) 다항식 곱: (5x⁴-3x²+7x+10)(4x³-7x²+9x+2)
+p1 = [5  0 -3  7 10];    % 5x⁴ + 0x³ - 3x² + 7x + 10
+p2 = [4 -7  9  2];       % 4x³ - 7x² + 9x + 2
+disp('(a) 다항식 곱의 계수:')
+product = conv(p1, p2)
+
+% (b) 다항식 나눗셈: (5x³-7x²+2x+8) ÷ (6x²+3x-2)
+num = [5 -7  2  8];
+den = [6  3 -2];
+disp('(b) 몫(q)과 나머지(r) 계수:')
+[q, r] = deconv(num, den)
+
+% (c) x=5에서 (36x³-8x²+2) / (36x³-5x²+4x-3) 계산
+num2 = [36 -8  0  2];
+den2 = [36 -5  4 -3];
+x_val = 5;
+result = polyval(num2, x_val) / polyval(den2, x_val);
+fprintf('(c) x=5에서의 값: %.6f\n', result);
+
+
+%% Section 7
+%% 문제 7 - 구조체 배열
+
+% (a) 구조체 배열 생성
+bridge(1).location    = 'Smith St.';  bridge(1).load = 80;
+bridge(1).year        = 1928;           bridge(1).maintenance = 2025;
+
+bridge(2).location    = 'Hope Ave.';  bridge(2).load = 90;
+bridge(2).year        = 1950;           bridge(2).maintenance = 2027;
+
+bridge(3).location    = 'Clark St.';  bridge(3).load = 85;
+bridge(3).year        = 1933;           bridge(3).maintenance = 2024;
+
+bridge(4).location    = 'North Rd.';  bridge(4).load = 100;
+bridge(4).year        = 1960;           bridge(4).maintenance = 2023;
+
+disp('(a) 구조체 배열 생성 완료')
+disp(bridge)
+
+% (b) Clark St. 유지기한 수정: 2024 → 2026
+bridge(3).maintenance = 2026;
+fprintf('(b) Clark St. 유지기한 수정: %d\n', bridge(3).maintenance);
+
+% (c) 새 bridge Shore Rd. 추가
+bridge(5).location    = 'Shore Rd.';  bridge(5).load = 85;
+bridge(5).year        = 1997;           bridge(5).maintenance = 2022;
+
+disp('(c) 추가 후 전체 구조체:')
+disp(bridge)
+
