@@ -1,0 +1,21 @@
+% func_5.m
+function [x_min, f_min] = ljs_25011307_func_5()
+    f = @(x) 30*x^2 - 300*x + 4;
+    
+    % (a) 그래프로 최솟값 위치 파악
+    x = linspace(-5, 15, 500);
+    figure;
+    plot(x, arrayfun(f, x), 'b-', 'LineWidth', 2);
+    xlabel('x'); ylabel('f(x)');
+    title('f(x) = 30x^2 - 300x + 4');
+    grid on;
+    
+    % (b) fminbnd로 정확한 최솟값
+    [x_min, f_min] = fminbnd(f, 0, 15);
+    hold on;
+    plot(x_min, f_min, 'ro', 'MarkerSize', 10, 'DisplayName', sprintf('최솟값: x=%.4f', x_min));
+    legend show;
+    
+    fprintf('최솟값 위치: x = %.6f\n', x_min);
+    fprintf('최솟값: f(x) = %.6f\n', f_min);
+end
