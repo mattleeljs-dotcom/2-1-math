@@ -1,0 +1,43 @@
+% func_3c.m
+function [r_opt, h_opt, A_min] = ljs_25011307_func_3c()
+    global V
+    V = 10;  % in^3
+
+    % fminbnd로 최적 r 탐색
+    [r_opt, A_min] = fminbnd(@ljs_25011307_func_3b, 0.1, 5);
+    h_opt = 3*V / (pi * r_opt^2);
+
+    fprintf('최적 r = %.4f in\n', r_opt);
+    fprintf('최적 h = %.4f in\n', h_opt);
+    fprintf('최소 면적 A = %.4f in^2\n', A_min);
+
+    % 그래프
+    r_vals = linspace(0.1, 5, 500);
+    A_vals = zeros(1, 500);
+    for i = 1:length(r_vals)
+        A_vals(i) = ljs_25011307_func_3b(r_vals(i));  % arrayfun 대신 for문 사용
+    end
+
+    figure;
+    plot(r_vals, A_vals, 'b-', 'LineWidth', 2);
+    hold on;
+    plot(r_opt, A_min, 'ro', 'MarkerSize', 10, 'DisplayName', ...
+        sprintf('최적값: r=%.4f', r_opt));
+
+    % 면적 10% 증가 기준선
+    A_threshold = A_min * 1.1;
+    yline(A_threshold, 'r--', 'DisplayName', '최솟값 +10%');
+
+    xlabel('r (in)'); ylabel('A (in^2)');
+    title('원뿔컵 반지름 r에 따른 표면적 A (V=10 in^3)');
+    legend show;
+    grid on;
+
+    % 10% 범위 내 r 구간
+    idx = A_vals <= A_threshold;
+    r_range = r_vals(idx);
+    fprintf('A가 최솟값 +10%% 이내인 r 범위: [%.4f, %.4f]\n', ...
+        r_range(1), r_range(end));
+    fprintf('최적값에서 왼쪽으로: %.4f in\n', r_opt - r_range(1));
+    fprintf('최적값에서 오른쪽으로: %.4f in\n', r_range(end) - r_opt);
+end
