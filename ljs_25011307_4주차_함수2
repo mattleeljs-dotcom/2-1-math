@@ -1,0 +1,25 @@
+% func_2.m
+function t = ljs_25011307_func_2(h, v0, g)
+    % h = v0*t - 0.5*g*t^2  =>  0.5g*t^2 - v0*t + h = 0
+    a = 0.5 * g;
+    b = -v0;
+    c = h;
+    
+    discriminant = b^2 - 4*a*c;
+    
+    if discriminant < 0
+        error('해당 높이에 도달할 수 없습니다.');
+    elseif discriminant == 0
+        t = -b / (2*a);
+        fprintf('t = %.4f s (해 1개)\n', t);
+    else
+        % - 기호가 들어간 쪽이 더 작으므로 먼저 도달하는(올라가는) 시간입니다.
+        t1 = (-b - sqrt(discriminant)) / (2*a); 
+        % + 기호가 들어간 쪽이 더 크므로 나중에 도달하는(내려오는) 시간입니다.
+        t2 = (-b + sqrt(discriminant)) / (2*a);
+        
+        t = [t1, t2];  % 순서대로 [올라갈 때, 내려올 때] 저장
+        fprintf('t1 = %.4f s (올라가는 중)\n', t(1));
+        fprintf('t2 = %.4f s (내려오는 중)\n', t(2));
+    end
+end
