@@ -1,0 +1,35 @@
+% func_1.m
+function [root, x_min, f_min] = ljs_25011307_func_1()
+    f = @(x) 0.3*x - sin(2*x);
+    
+    % 그래프로 개략적 위치 파악
+    x = linspace(0, 4, 1000);
+    figure;
+    plot(x, f(x), 'b-', 'LineWidth', 2);
+    hold on;
+    yline(0, 'k--');
+    xlabel('x'); ylabel('f(x)');
+    title('f(x) = 0.3x - sin(2x)');
+    grid on;
+    
+    % 근 찾기 (fzero)
+    root = fzero(f, 1.5);
+    fprintf('근: x = %.6f\n', root);
+    
+    % 최솟값 찾기 (fminbnd)
+    [x_min, f_min] = fminbnd(f, 0, 4);
+    fprintf('최솟값: x = %.6f, f(x) = %.6f\n', x_min, f_min);
+    
+    % 전역 최솟값 확인 (여러 초기점으로 검증)
+    candidates = [];
+    for x0 = 0:0.5:4
+        [xc, fc] = fminbnd(f, max(0,x0-0.5), min(4,x0+0.5));
+        candidates = [candidates; xc, fc];
+    end
+    fprintf('전역 최솟값 확인 (모든 로컬 최솟값):\n');
+    disp(unique(round(candidates,4),'rows'));
+    
+    plot(root, f(root), 'ro', 'MarkerSize', 10, 'DisplayName', sprintf('근: x=%.4f', root));
+    plot(x_min, f_min, 'g^', 'MarkerSize', 10, 'DisplayName', sprintf('최솟값: x=%.4f', x_min));
+    legend show;
+end
