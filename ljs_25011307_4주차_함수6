@@ -1,0 +1,21 @@
+% func_6.m
+function ljs_25011307_func_6()
+    % 각 구성 함수 정의
+    h = @(z) 6 * exp(z);
+    g = @(y) 3 * cos(y);
+    f = @(x) x^2;
+
+    % 합성 함수: h(g(f(x))) = 6*e^(3*cos(x^2))
+    composite = @(x) h(g(f(x)));
+
+    x = linspace(0, 4, 500);
+    y_vals = arrayfun(composite, x);
+
+    figure;
+    plot(x, y_vals, 'b-', 'LineWidth', 2);
+    xlabel('x'); ylabel('y');
+    title('y = 6e^{3cos(x^2)}, 0 \leq x \leq 4');  % \cos 제거
+    grid on;
+
+    fprintf('합성 함수 그래프 생성 완료\n');
+end
