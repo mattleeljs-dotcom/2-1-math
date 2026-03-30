@@ -1,0 +1,11 @@
+% func_4.m
+function ljs_25011307_func_4()
+    f = @(x) 10 * exp(-2*x);
+    
+    x = linspace(0, 2, 500);
+    figure;
+    plot(x, f(x), 'b-', 'LineWidth', 2);
+    xlabel('x'); ylabel('f(x)');
+    title('f(x) = 10e^{-2x}, 0 \leq x \leq 2');
+    grid on;
+end
