@@ -1,0 +1,26 @@
+%% 2. 사용자 제어 입출력 종합 문제
+
+%% (1) 학생 이름 입력
+name = input('학생 이름을 입력하시오: ', 's');
+
+%% (2) 세 과목 점수 입력
+scores = input('국어, 영어, 수학 점수를 벡터로 입력하시오 (예: [88 92 79]): ');
+
+%% (3) 평균 계산 및 출력
+avg = mean(scores);
+fprintf('\n--- 성적 결과 ---\n');
+fprintf('이름: %s\n', name);
+fprintf('국어: %d, 영어: %d, 수학: %d\n', scores(1), scores(2), scores(3));
+fprintf('평균: %.2f\n', avg);
+
+%% (4) 등급 출력
+if avg >= 90
+    grade = 'Excellent';
+elseif avg >= 80
+    grade = 'Good';
+elseif avg >= 70
+    grade = 'Fair';
+else
+    grade = 'Needs Improvement';
+end
+fprintf('등급: %s\n', grade);
