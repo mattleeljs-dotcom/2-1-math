@@ -1,0 +1,35 @@
+%% 3. 관계연산자, 논리연산자, find 함수 종합 문제
+
+% 지원자 행렬 (열: 키, 시험점수, 면접통과)
+applicants = [165 72 1;
+              172 85 0;
+              168 91 1;
+              181 77 1;
+              174 69 0;
+              169 88 1];
+
+%% (1) 키가 170 이상인 논리 배열
+tall = applicants(:,1) >= 170;
+disp('(1) 키 >= 170 논리 배열:');
+disp(tall');
+
+%% (2) 시험점수 80 이상 논리 배열
+highScore = applicants(:,2) >= 80;
+disp('(2) 시험점수 >= 80 논리 배열:');
+disp(highScore');
+
+%% (3) 면접 통과 논리 배열
+passed = applicants(:,3) == 1;
+disp('(3) 면접 통과 논리 배열:');
+disp(passed');
+
+%% (4) 최종 합격자 행 번호
+finalPass = tall & highScore & passed;
+rows = find(finalPass);
+disp('(4) 최종 합격자 행 번호:');
+disp(rows');
+
+%% (5) 최종 합격자 정보 출력
+result = [rows, applicants(rows, :)];
+disp('(5) 최종 합격자 [행번호, 키, 시험점수, 면접통과]:');
+disp(result);
