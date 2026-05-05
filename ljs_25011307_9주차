@@ -1,0 +1,493 @@
+%% 9주차 과제
+% MATLAB 프로그래밍 Spring 2026
+% 9주차 과제 - 그래프 및 행렬 연산
+
+%% 문제 1
+clear; clc;
+
+x = 0 : 0.05 : 6*pi;
+y = sin(x) + 0.5*cos(3*x);
+
+figure;
+plot(x, y);
+xticks(0 : pi : 6*pi);
+xticklabels({'0','\pi','2\pi','3\pi','4\pi','5\pi','6\pi'});
+title('y = sin(x) + 0.5cos(3x)');
+xlabel('x');
+ylabel('y');
+grid on;
+
+%% 문제 2
+clear; clc;
+
+x = 1 : 1 : 50;
+y = 3.^x;
+
+figure;
+subplot(1,2,1);
+plot(x, y);
+title('일반 plot: y = 3^x');
+xlabel('x');
+ylabel('y');
+grid on;
+
+subplot(1,2,2);
+semilogy(x, y);
+title('semilogy: y = 3^x');
+xlabel('x');
+ylabel('y (log scale)');
+grid on;
+
+%%
+% *두 그래프의 차이:*
+% 일반 plot에서는 x가 커질수록 y 값이 폭발적으로 증가하여
+% 작은 x 구간의 변화가 거의 보이지 않는다.
+% semilogy에서는 y축을 로그 스케일로 표현하므로
+% 지수 함수가 직선 형태로 나타나며, 전 구간의 변화를 고르게 확인할 수 있다.
+
+%% 문제 3
+clear; clc;
+
+score = [72, 85, 91, 66, 78, 88, 95, 54, 60, 73, ...
+         82, 90, 69, 77, 84, 92, 58, 63, 79, 87];
+
+save('score.dat', 'score', '-ascii');
+loaded = load('score.dat');
+
+figure;
+subplot(1,2,1);
+histogram(loaded, 5);
+title('히스토그램 (구간 5개)');
+xlabel('점수');
+ylabel('빈도');
+grid on;
+
+subplot(1,2,2);
+histogram(loaded, 10);
+title('히스토그램 (구간 10개)');
+xlabel('점수');
+ylabel('빈도');
+grid on;
+
+%% 문제 4
+clear; clc;
+
+f = @(x) sin(x) .* exp(-0.1*x);
+
+figure;
+fplot(f, [0, 10*pi]);
+title('f(x) = sin(x)e^{-0.1x}');
+xlabel('x');
+ylabel('f(x)');
+grid on;
+
+%% 문제 5
+clear; clc;
+
+x = 0 : 0.1 : 10;
+y1 = x.^2;
+y2 = exp(0.5*x);
+
+figure;
+yyaxis left;
+plot(x, y1, 'b-');
+ylabel('y1 = x^2');
+
+yyaxis right;
+plot(x, y2, 'r-');
+ylabel('y2 = e^{0.5x}');
+
+title('y1 = x^2  vs  y2 = e^{0.5x}');
+xlabel('x');
+grid on;
+legend('y1 = x^2', 'y2 = e^{0.5x}');
+
+%%
+% *두 함수의 증가 양상:*
+% y1 = x^2 는 다항식 증가로, x가 커질수록 완만하게 증가한다.
+% y2 = e^{0.5x} 는 지수 함수 증가로, x가 커질수록 y1보다 훨씬 빠르게 증가한다.
+% 따라서 x가 충분히 클 때 지수 함수가 다항식을 압도한다.
+
+%% 문제 6
+clear; clc;
+
+t = 0 : 0.02 : 12*pi;
+x = (1 + 0.03*t) .* cos(t);
+y = (1 + 0.03*t) .* sin(t);
+z = 0.2 * t;
+
+figure;
+plot3(x, y, z);
+title('나선형 매개곡선 (plot3)');
+xlabel('x');
+ylabel('y');
+zlabel('z');
+grid on;
+
+%% 문제 7
+clear; clc;
+
+[X, Y] = meshgrid(-4 : 0.1 : 4, -4 : 0.1 : 4);
+Z = X.^2 - Y.^2;
+
+figure;
+mesh(X, Y, Z);
+title('z = x^2 - y^2');
+xlabel('x');
+ylabel('y');
+zlabel('z');
+grid on;
+
+%%
+% *Saddle Surface 설명:*
+% z = x^2 - y^2 는 안장면(saddle surface)이다.
+% x 방향으로는 위로 볼록(아래로 오목)한 포물선 형태이고,
+% y 방향으로는 아래로 볼록(위로 오목)한 포물선 형태를 가진다.
+% 원점(0,0,0)이 안장점(saddle point)이 되며,
+% 그래프 모양이 말 안장을 닮아 saddle surface라 부른다.
+
+%% 문제 8
+clear; clc;
+
+[X, Y] = meshgrid(-2*pi : 0.1 : 2*pi, -2*pi : 0.1 : 2*pi);
+Z = sin(X) .* cos(Y);
+
+figure;
+subplot(1,2,1);
+mesh(X, Y, Z);
+title('mesh: z = sin(x)cos(y)');
+xlabel('x');
+ylabel('y');
+zlabel('z');
+grid on;
+
+subplot(1,2,2);
+contour(X, Y, Z, 20);
+title('contour: z = sin(x)cos(y)');
+xlabel('x');
+ylabel('y');
+colorbar;
+grid on;
+
+%%
+% *Contour 그래프의 의미:*
+% contour 그래프는 3D 함수를 2D 평면에서 등고선으로 표현한 것이다.
+% 같은 등고선 위의 점들은 z 값이 동일하며,
+% 등고선이 밀집된 곳은 기울기(변화율)가 크고,
+% 등고선 간격이 넓은 곳은 변화율이 작음을 나타낸다.
+% 또한 등고선의 패턴을 통해 함수의 극값(최대/최소)의 위치를 파악할 수 있다.
+
+%% 문제 9
+clear; clc;
+
+t = 0 : 0.01 : 25;
+y = exp(-0.15*t) .* cos(4*t);
+env_up   =  exp(-0.15*t);
+env_down = -exp(-0.15*t);
+
+% (a) 일반 plot
+figure;
+subplot(1,3,1);
+plot(t, y);
+title('(a) y(t) = e^{-0.15t}cos(4t)');
+xlabel('t');
+ylabel('y');
+grid on;
+
+% (b) envelope 추가
+subplot(1,3,2);
+plot(t, y, 'b'); hold on;
+plot(t, env_up,   'r--', 'LineWidth', 1.5);
+plot(t, env_down, 'r--', 'LineWidth', 1.5);
+hold off;
+title('(b) 신호 + Envelope');
+xlabel('t');
+ylabel('y');
+legend('y(t)', 'upper envelope', 'lower envelope');
+grid on;
+
+% (c) |y(t)| semilogy
+subplot(1,3,3);
+semilogy(t, abs(y));
+title('(c) semilogy: |y(t)|');
+xlabel('t');
+ylabel('|y(t)| (log scale)');
+grid on;
+
+%%
+% *(c) 설명:*
+% |y(t)|를 semilogy로 나타내면 진폭이 지수적으로 감쇠하는 부분이
+% 거의 직선 형태로 나타난다.
+% 이는 감쇠 계수(0.15)가 log 스케일에서 기울기로 직접 드러나기 때문이며,
+% 코사인 진동에 의한 값 변동은 로그 스케일에서 위아래 떨림으로 표시된다.
+
+%% 문제 10
+clear; clc;
+
+[X, Y] = meshgrid(-6 : 0.1 : 6, -6 : 0.1 : 6);
+Z = cos(X) .* sin(Y) .* exp(-0.05*(X.^2 + Y.^2));
+
+% (a) mesh
+figure;
+subplot(1,2,1);
+mesh(X, Y, Z);
+title('(a) mesh: z = cos(x)sin(y)e^{-0.05(x^2+y^2)}');
+xlabel('x'); ylabel('y'); zlabel('z');
+grid on;
+
+% (b) contour
+subplot(1,2,2);
+contour(X, Y, Z, 20);
+title('(b) contour');
+xlabel('x'); ylabel('y');
+colorbar;
+grid on;
+
+% (c) 최대값과 위치 추정
+[max_val, idx] = max(Z(:));
+[row, col] = ind2sub(size(Z), idx);
+x_max = X(row, col);
+y_max = Y(row, col);
+
+fprintf('Z의 최대값: %.4f\n', max_val);
+fprintf('최대값 위치: x = %.2f, y = %.2f\n', x_max, y_max);
+
+%% 문제 11
+clear; clc;
+
+t = [0, 1, 2, 3, 4, 5, 6];
+C = [12, 8.9, 6.6, 4.9, 3.6, 2.7, 2.0];
+
+% (a) 일반 plot
+figure;
+subplot(1,2,1);
+plot(t, C, 'bo-');
+title('(a) 농도 C(t) - 일반 plot');
+xlabel('t');
+ylabel('C(t)');
+grid on;
+
+% (b) semilogy
+subplot(1,2,2);
+semilogy(t, C, 'ro-');
+title('(b) 농도 C(t) - semilogy');
+xlabel('t');
+ylabel('C(t) (log scale)');
+grid on;
+
+% (c) k 추정: log(C) = log(C0) - k*t  =>  선형 회귀
+log_C = log(C);
+p = polyfit(t, log_C, 1);
+k     = -p(1);
+log_C0 = p(2);
+C0    = exp(log_C0);
+
+fprintf('추정된 k  = %.4f\n', k);
+fprintf('추정된 C0 = %.4f\n', C0);
+
+%% 문제 12
+clear; clc;
+
+n = 1 : 1 : 30;
+T1 = n;
+T2 = n .* log(n);
+T3 = n.^2;
+T4 = 2.^n;
+
+% (a) 일반 plot
+figure;
+subplot(1,2,1);
+plot(n, T1, n, T2, n, T3, n, T4);
+title('(a) 알고리즘 계산량 비교 - 일반 plot');
+xlabel('n');
+ylabel('T(n)');
+legend('T1=n','T2=n\cdotlog(n)','T3=n^2','T4=2^n');
+grid on;
+
+% (b) semilogy
+subplot(1,2,2);
+semilogy(n, T1, n, T2, n, T3, n, T4);
+title('(b) 알고리즘 계산량 비교 - semilogy');
+xlabel('n');
+ylabel('T(n) (log scale)');
+legend('T1=n','T2=n\cdotlog(n)','T3=n^2','T4=2^n');
+grid on;
+
+%%
+% *(c) 어떤 그래프가 성장률 비교에 더 적합한가:*
+% semilogy(로그 스케일 그래프)가 더 적절하다.
+% 일반 plot에서는 T4=2^n이 n이 커지면 매우 빠르게 폭발적으로 증가하여
+% 나머지 함수(T1, T2, T3)의 차이가 거의 보이지 않는다.
+% 반면 semilogy에서는 각 함수의 성장률 차이가 명확하게 드러나며,
+% 지수 함수(T4)는 직선, 다항식(T3)은 완만한 곡선으로 구분되어
+% 알고리즘 복잡도 비교에 훨씬 유리하다.
+
+%% 문제 16
+clear; clc;
+
+t = 0 : 0.01 : 24;
+T = 15 + 10*sin(pi*t / 12);
+
+[T_max, idx_max] = max(T);
+[T_min, idx_min] = min(T);
+t_max = t(idx_max);
+t_min = t(idx_min);
+
+figure;
+plot(t, T, 'b-', 'LineWidth', 1.5); hold on;
+plot(t_max, T_max, 'rv', 'MarkerSize', 10, 'MarkerFaceColor', 'r');
+plot(t_min, T_min, '^', 'Color', [0 0.5 1], 'MarkerSize', 10, 'MarkerFaceColor', [0 0.5 1]);
+text(t_max, T_max + 0.8, sprintf('최고 %.1f°C (t=%.1fh)', T_max, t_max), ...
+    'HorizontalAlignment','center');
+text(t_min, T_min - 1.2, sprintf('최저 %.1f°C (t=%.1fh)', T_min, t_min), ...
+    'HorizontalAlignment','center');
+hold off;
+title('하루 온도 변화: T(t) = 15 + 10sin(\pit/12)');
+xlabel('시간 t (h)');
+ylabel('온도 T (°C)');
+grid on;
+legend('온도', '최고 온도', '최저 온도');
+
+%% 문제 17
+clear; clc;
+
+t = 0 : 0.01 : 20;
+v = 5 * exp(-0.2*t);
+
+% (1) 일반 plot
+figure;
+subplot(1,2,1);
+plot(t, v, 'b-', 'LineWidth', 1.5);
+title('(1) 속도 v(t) = 5e^{-0.2t} - 일반 plot');
+xlabel('t (s)');
+ylabel('v(t)');
+grid on;
+
+% (2) semilogy
+subplot(1,2,2);
+semilogy(t, v, 'r-', 'LineWidth', 1.5);
+title('(2) 속도 v(t) - semilogy');
+xlabel('t (s)');
+ylabel('v(t) (log scale)');
+grid on;
+
+%%
+% *(3) 두 그래프의 차이:*
+% 일반 plot에서는 속도가 처음에 빠르게 감소하다가 이후 거의 0에 수렴하는
+% 지수 감쇠 곡선 형태를 보인다.
+% semilogy에서는 지수 감쇠 함수가 완전한 직선으로 나타나며,
+% 기울기가 감쇠 계수(-0.2)에 해당한다.
+% 즉, 로그 스케일에서 직선이면 지수 감쇠임을 쉽게 확인할 수 있고,
+% 감쇠율(기울기)을 직관적으로 파악하기 유리하다.
+
+%% 문제 18
+clear; clc;
+
+A = [4 -1 2; 1 3 -1; 2 -2 5];
+b = [7; 4; 10];
+
+% (a) A^2 vs A.^2
+A_pow2    = A^2;
+A_elem2   = A.^2;
+
+disp('A^2 (행렬 거듭제곱):');
+disp(A_pow2);
+disp('A.^2 (원소별 제곱):');
+disp(A_elem2);
+
+%%
+% *A^2와 A.^2의 차이:*
+% A^2 는 행렬 곱 A*A로, 선형대수적 행렬 거듭제곱이다.
+% A.^2 는 각 원소를 개별적으로 제곱한 것으로, 결과 행렬의 각 원소는 원래 원소의 제곱이다.
+% 따라서 두 결과는 일반적으로 다르다.
+
+% (b) det(A)
+d = det(A);
+fprintf('det(A) = %.4f\n', d);
+if abs(d) > 1e-10
+    disp('det(A) ≠ 0 이므로 역행렬이 존재한다.');
+else
+    disp('det(A) = 0 이므로 역행렬이 존재하지 않는다.');
+end
+
+% (c) inv(A)*b vs A\b
+x_inv = inv(A) * b;
+x_bs  = A \ b;
+
+disp('inv(A)*b =');
+disp(x_inv);
+disp('A\b =');
+disp(x_bs);
+
+%%
+% *비교:* 두 방법 모두 동일한 해를 반환한다.
+% 다만 A\b 는 수치적으로 더 안정적이고 효율적이다.
+
+% (d) 선형 연립방정식의 해
+x = A \ b;
+fprintf('Ax = b 의 해:\n');
+disp(x);
+
+%% 문제 19
+clear; clc;
+
+A = [2 -1; 3 4];
+B = [1 0 -2; 3 5 1];
+C = [6 -3 4; 15 14 -1];
+
+% (a) AX = C - B
+RHS = C - B;
+
+% (b) X = A \ (C-B)
+X = A \ RHS;
+disp('X =');
+disp(X);
+
+% (c) 검증: AX + B == C
+verify = A*X + B;
+disp('AX + B =');
+disp(verify);
+disp('C =');
+disp(C);
+disp('차이 (AX+B - C):');
+disp(verify - C);
+
+%%
+% *(d) A\(C-B) vs inv(A)*(C-B):*
+% inv(A)를 명시적으로 계산하면 수치 오차가 누적될 수 있고 계산 비용도 더 크다.
+% A\(C-B)는 LU 분해 등 수치적으로 안정적인 방법을 사용하므로
+% 더 정확하고 효율적인 해를 얻을 수 있다.
+
+%% 문제 20
+clear; clc;
+
+X = [3  7  2  5;
+     5  9  4  6;
+     8 12  7 10;
+    10 15  9 13;
+    14 18 12 16];
+
+% (a) 각 열의 평균
+col_mean = mean(X);
+disp('각 열의 평균:');
+disp(col_mean);
+
+% (b) 중심화 행렬
+Xc = X - mean(X);
+disp('중심화 행렬 Xc:');
+disp(Xc);
+
+% (c) S = Xc' * Xc
+S = Xc' * Xc;
+disp('S = Xc''*Xc:');
+disp(S);
+
+%%
+% *(d) S의 원소 의미:*
+% 대각원소 S(i,i)는 i번째 열 변수의 (비정규화) 분산에 해당한다.
+% 값이 클수록 해당 변수의 데이터가 평균으로부터 크게 퍼져 있음을 의미한다.
+%
+% 비대각원소 S(i,j) (i≠j)는 i번째와 j번째 열 변수 사이의 (비정규화) 공분산이다.
+% 양수이면 두 변수가 같은 방향으로 변하는 경향(양의 상관),
+% 음수이면 반대 방향으로 변하는 경향(음의 상관)을 나타낸다.
+
