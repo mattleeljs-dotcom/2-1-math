@@ -1,0 +1,290 @@
+%% Problem 1
+clear; clc;
+
+rng(13);
+
+p = 0.35 + (0.95-0.35)*rand(1,40);
+
+answers = rand(5000,40) < p;
+
+scores = sum(answers,2);
+
+avgScore = mean(scores);
+stdScore = std(scores);
+
+fprintf('Average Score = %.4f\n',avgScore);
+fprintf('Std Score = %.4f\n',stdScore);
+
+histogram(scores);
+xlabel('Score');
+ylabel('Frequency');
+title('Score Distribution');
+
+ratioAboveMean = mean(scores >= avgScore);
+
+fprintf('Ratio >= Mean = %.4f\n',ratioAboveMean);
+
+%% Problem 2
+clear; clc;
+
+weights = 100 + 4*randn(10000,20);
+
+boxMean = mean(weights,2);
+
+fail = (boxMean < 98) | (boxMean > 102);
+
+failRate = mean(fail);
+
+fprintf('Fail Rate = %.4f\n',failRate);
+
+histogram(boxMean);
+
+xline(98,'r','LineWidth',2);
+xline(102,'r','LineWidth',2);
+
+xlabel('Average Weight');
+ylabel('Frequency');
+title('Box Mean Weight');
+
+%% Problem 3
+clear; clc;
+
+N = randn(100000,1);
+
+S = 1.8 + N;
+
+success = S >= 1.2;
+
+successRate = mean(success);
+
+fprintf('Detection Success Rate = %.4f\n',successRate);
+
+histogram(S);
+
+xline(1.2,'r','LineWidth',2);
+
+xlabel('Signal Strength');
+ylabel('Frequency');
+title('Received Signal');
+
+%% Problem 4
+clear; clc;
+
+orders = poissrnd(180,365,1);
+
+totalTime = zeros(365,1);
+
+for i = 1:365
+
+    t = 6 + 2*randn(orders(i),1);
+
+    t(t<0) = 0;
+
+    totalTime(i) = sum(t);
+
+end
+
+ratio = mean(totalTime > 1200);
+
+fprintf('Ratio > 1200 min = %.4f\n',ratio);
+
+figure;
+plot(orders);
+xlabel('Day');
+ylabel('Orders');
+title('Daily Orders');
+
+figure;
+plot(totalTime);
+xlabel('Day');
+ylabel('Total Processing Time');
+title('Daily Processing Time');
+
+figure;
+scatter(orders,totalTime);
+xlabel('Orders');
+ylabel('Processing Time');
+title('Orders vs Processing Time');
+
+%% Problem 5
+clear; clc;
+
+measurements = 25 + 0.8*randn(10000,30);
+
+avgTemp = mean(measurements,2);
+
+event = (avgTemp >= 24.7) & (avgTemp <= 25.3);
+
+probability = mean(event);
+
+fprintf('Probability = %.4f\n',probability);
+
+sensor1 = measurements(:,1);
+
+figure;
+
+histogram(sensor1,'Normalization','pdf');
+hold on
+
+histogram(avgTemp,'Normalization','pdf');
+
+legend('Single Sensor','Average of 30 Sensors');
+
+title('Comparison');
+
+%% Problem 6
+clear; clc;
+
+returns = 0.0008 + 0.015*randn(5000,60);
+
+asset = 100*cumprod(1+returns,2);
+
+finalAsset = asset(:,end);
+
+fprintf('Mean = %.4f\n',mean(finalAsset));
+fprintf('Min = %.4f\n',min(finalAsset));
+fprintf('Max = %.4f\n',max(finalAsset));
+
+probLess100 = mean(finalAsset < 100);
+
+fprintf('P(Final Asset < 100) = %.4f\n',probLess100);
+
+idx = randperm(5000,30);
+
+figure;
+plot(asset(idx,:)');
+
+xlabel('Day');
+ylabel('Asset Value');
+title('30 Random Paths');
+
+%% Problem 7
+clear; clc;
+
+arrivalInterval = exprnd(8,300,1);
+
+arrivalTime = cumsum(arrivalInterval);
+
+serviceTime = 10 + 3*randn(300,1);
+
+serviceTime(serviceTime<0) = 1;
+
+startTime = zeros(300,1);
+finishTime = zeros(300,1);
+
+startTime(1) = arrivalTime(1);
+finishTime(1) = startTime(1) + serviceTime(1);
+
+for i = 2:300
+
+    startTime(i) = max(arrivalTime(i),finishTime(i-1));
+
+    finishTime(i) = startTime(i) + serviceTime(i);
+
+end
+
+waitTime = startTime - arrivalTime;
+
+fprintf('Average Wait = %.4f\n',mean(waitTime));
+fprintf('Maximum Wait = %.4f\n',max(waitTime));
+fprintf('Ratio Wait > 20 = %.4f\n',mean(waitTime>20));
+
+histogram(waitTime);
+
+xlabel('Waiting Time');
+ylabel('Frequency');
+title('Waiting Time Distribution');
+
+%% Problem 8
+clear; clc;
+
+p = [0.72 0.81 0.67 0.90 0.76];
+
+R = rand(100000,5);
+
+detect = R < p;
+
+countDetect = sum(detect,2);
+
+success = countDetect >= 3;
+
+probability = mean(success);
+
+fprintf('Detection Probability = %.4f\n',probability);
+
+histogram(countDetect,...
+    'BinMethod','integers');
+
+xlabel('Detected Modules');
+ylabel('Frequency');
+title('Number of Detected Modules');
+
+%% Problem 9
+clear; clc;
+
+n = 50000;
+
+stage1 = rand(n,1) < 0.94;
+
+stage2 = false(n,1);
+
+idx1 = find(stage1);
+
+stage2(idx1) = rand(length(idx1),1) < 0.91;
+
+stage3 = false(n,1);
+
+idx2 = find(stage2);
+
+stage3(idx2) = rand(length(idx2),1) < 0.88;
+
+finalPass = stage3;
+
+finalRate = mean(finalPass);
+
+fprintf('Final Pass Rate = %.4f\n',finalRate);
+
+fail1 = sum(~stage1);
+
+fail2 = sum(stage1 & ~stage2);
+
+fail3 = sum(stage2 & ~stage3);
+
+passNum = sum(finalPass);
+
+figure;
+
+bar([fail1 fail2 fail3 passNum]);
+
+xticklabels({'Fail1','Fail2','Fail3','Pass'});
+
+ylabel('Count');
+title('Inspection Results');
+
+%% Problem 10
+clear; clc;
+
+serverLoad = 35*randn(10000,1);
+
+overload = rand(10000,1) < 0.12;
+
+powerUsage = 500 + serverLoad + 120*overload;
+
+ratio = mean(powerUsage > 650);
+
+fprintf('Ratio > 650 = %.4f\n',ratio);
+
+histogram(powerUsage);
+
+xlabel('Power Usage');
+ylabel('Frequency');
+title('Power Usage Distribution');
+
+meanOverload = mean(powerUsage(overload));
+
+meanNormal = mean(powerUsage(~overload));
+
+fprintf('Mean (Overload Days) = %.4f\n',meanOverload);
+fprintf('Mean (Normal Days) = %.4f\n',meanNormal);
+
+
